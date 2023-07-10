@@ -1,0 +1,19 @@
+import json
+import boto3
+dynamodb = boto3.resource('dynamodb')
+table_name = 'Customers' # Replace with your DynamoDB table name
+def lambda_handler(event, context):
+    # Retrieve the query parameters from the GET request
+    query_params = event['queryStringParameters']
+    # Extract the data you want to save to DynamoDB
+    data = { 'userid':"1" ,'name': query_params.get('name'), 'age': query_params.get('age'), 'city':
+query_params.get('city') } # Add more parameters as needed 
+    # Save the data to DynamoDB
+    table = dynamodb.Table(table_name)
+    table.put_item(Item=data)
+    # Return a response to the API Gateway
+    response = {
+    'statusCode': 200,
+    'body': json.dumps({'message': 'Data saved successfully'})  
+    }
+    return response
